@@ -401,8 +401,11 @@ private class WatchTimeReporter(private val player: ExoPlayer) : Player.Listener
 @OptIn(UnstableApi::class)
 private class MemoryBudgetLoadControl(
     context: Context,
-    private val budgetBytes: Long = context.getSystemService(ActivityManager::class.java)
-        .largeMemoryClass * 1024L * 1024L * 60 / 100,
+    private val budgetBytes: Long = minOf(
+        context.getSystemService(ActivityManager::class.java)
+            .largeMemoryClass * 1024L * 1024L * 25 / 100,
+        96L * 1024L * 1024L,
+    ),
     private val inner: DefaultLoadControl = DefaultLoadControl.Builder()
         .setBufferDurationsMs(MIN_AHEAD_MS, Int.MAX_VALUE, 1_000, 2_000)
         .setBackBuffer(BACK_BUFFER_MS, /* retainBackBufferFromKeyframe = */ true)
@@ -441,7 +444,7 @@ private class MemoryBudgetLoadControl(
 
     companion object {
         const val MIN_AHEAD_MS = 15_000
-        const val BACK_BUFFER_MS = 3 * 60_000
+        const val BACK_BUFFER_MS = 30_000
     }
 }
 
