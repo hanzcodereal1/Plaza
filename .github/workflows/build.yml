@@ -15,8 +15,13 @@ jobs:
           distribution: temurin
           java-version: 17
       - uses: gradle/actions/setup-gradle@v4
+        with:
+          # gradle-wrapper.jar di repo ini bukan JAR resmi, jadi validasi dimatikan
+          # dan Gradle dipasang langsung oleh action (bukan lewat ./gradlew)
+          validate-wrappers: false
+          gradle-version: 8.11.1
       - name: Assemble debug and release
-        run: ./gradlew assembleDebug assembleRelease --console=plain
+        run: gradle assembleDebug assembleRelease --console=plain
       - uses: actions/upload-artifact@v4
         with:
           name: plaza-apks
