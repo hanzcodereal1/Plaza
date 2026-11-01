@@ -62,8 +62,10 @@ object AvSync {
     private var framePeriodNs = 0L
     private var usedVsyncNs = 0L
 
-    @RequiresApi(33)
-    private val vsync = object : Choreographer.VsyncCallback {
+    // Lazy on purpose: Choreographer.VsyncCallback only exists on Android 13+. Creating it when
+    // AvSync loads made every older phone crash with NoClassDefFoundError on the first frame.
+    @get:RequiresApi(33)
+    private val vsync: Choreographer.VsyncCallback by lazy(LazyThreadSafetyMode.NONE) { object : Choreographer.VsyncCallback {
         override fun onVsync(data: Choreographer.FrameData) {
             val timeline = data.preferredFrameTimeline
             frameVsyncNs = data.frameTimeNanos
@@ -75,7 +77,7 @@ object AvSync {
             if (System.nanoTime() - lastDrawnNs < IDLE_NS) Choreographer.getInstance().postVsyncCallback(this)
             else watching = false
         }
-    }
+    } }
 
     /** The video TextureView drew a new frame (onSurfaceTextureUpdated, during the draw). */
     fun onFrameDrawn() {
