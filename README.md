@@ -110,4 +110,4 @@ Plaza 1.0.0, by Hanz Dev Official.
 - Email: hanzzcodee@gmail.com
 
 Plaza is based on [Skipii](https://github.com/deciocrytek/Skipii) by deciocrytek and is released under the
-same license (GPL-3.0, see `LICENSE`). Names, package and settings screens were changed.
+same license (GPL-3.0, see `LICENSE`). Names, package and settings screens were changed .
