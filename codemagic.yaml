@@ -1,0 +1,14 @@
+workflows:
+  plaza-debug:
+    name: Plaza
+    max_build_duration: 30
+    instance_type: linux_x2
+    environment:
+      java: 17
+    scripts:
+      - name: Set SDK path
+        script: echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
+      - name: Build debug APK
+        script: gradle assembleDebug --console=plain
+    artifacts:
+      - app/build/outputs/apk/**/*.apk
